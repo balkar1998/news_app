@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 import Spinner from './Spinner';
@@ -7,6 +6,7 @@ export default class News extends Component {
   static defaultProps = {
     pageSize: 8,
     category: 'general',
+    progress: 0,
   }
 
   constructor(){
@@ -23,13 +23,16 @@ export default class News extends Component {
     this.setState({
       loading: true,
     })
+    this.props.progress(30)
     let data = await(await fetch(url)).json()
+    this.props.progress(70)
     console.log(data)
     this.setState({
         articles : data.articles,
         totalCount : data.totalResults,
         loading: false,
       })
+    this.props.progress(100)
   }
 
   handleNextClick = async () => {
@@ -39,13 +42,16 @@ export default class News extends Component {
     this.setState({
       loading: true,
     })
+    this.props.progress(30)
     let data = await(await fetch(url)).json()
+    this.props.progress(70)
     this.setState({
       page: this.state.page + 1,
       articles: data.articles,
       loading: false,
     })
     }
+    this.props.progress(100)
   }
 
   handlePreClick = async () => {
@@ -53,12 +59,15 @@ export default class News extends Component {
     this.setState({
       loading: true,
     })
+    this.props.progress(30)
     let data = await(await fetch(url)).json()
+    this.props.progress(70)
     this.setState({
       page: this.state.page - 1,
       articles: data.articles,
       loading: false,
     })
+    this.props.progress(100)
   }
 
   render() {
@@ -78,7 +87,7 @@ export default class News extends Component {
         </div>
       </div>
       <div className='container d-flex justify-content-between mb-4'>
-          <button disabled={this.state.page==1} className='btn btn-dark' onClick={this.handlePreClick}> &larr; Previous</button>
+          <button disabled={this.state.page===1} className='btn btn-dark' onClick={this.handlePreClick}> &larr; Previous</button>
           <button disabled={this.state.page+1 > Math.ceil(this.state.totalCount/this.props.pageSize)} className='btn btn-dark' onClick={this.handleNextClick}>Next &rarr; </button>
       </div>
       </>
