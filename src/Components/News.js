@@ -27,12 +27,17 @@ export default class News extends Component {
     let data = await(await fetch(url)).json()
     this.props.progress(70)
     console.log(data)
+    if(data.articles.length===0)
+    {
+
+    }else{
     this.setState({
         articles : data.articles,
         totalCount : data.totalResults,
         loading: false,
       })
     this.props.progress(100)
+    }
   }
 
   handleNextClick = async () => {
@@ -45,6 +50,10 @@ export default class News extends Component {
     this.props.progress(30)
     let data = await(await fetch(url)).json()
     this.props.progress(70)
+    if(data.articles.length===0)
+    {
+
+    }else{
     this.setState({
       page: this.state.page + 1,
       articles: data.articles,
@@ -52,6 +61,7 @@ export default class News extends Component {
     })
     }
     this.props.progress(100)
+  }
   }
 
   handlePreClick = async () => {
@@ -62,12 +72,17 @@ export default class News extends Component {
     this.props.progress(30)
     let data = await(await fetch(url)).json()
     this.props.progress(70)
+    if(data.articles.length===0)
+    {
+
+    }else{
     this.setState({
       page: this.state.page - 1,
       articles: data.articles,
       loading: false,
     })
     this.props.progress(100)
+  }
   }
 
   render() {
